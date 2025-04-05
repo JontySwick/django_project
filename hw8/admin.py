@@ -30,12 +30,16 @@ class SubTaskAdmin(admin.ModelAdmin):
     ordering = ('-deadline', 'title')
     list_per_page = 20
 
-    def action_filter_done(self, request, queryset):
-        queryset.filter(status__iexact="Done")
+    def action_mark_as_done(self, request, queryset):
+        queryset.update(status='done')
+        self.message_user(
+            request,
+            "Selected object is updated"
+        )
 
-    action_filter_done.short_description = "Filter objects with status is Done"
+    action_mark_as_done.short_description = "Move selected sub task to status \"Done\""
 
-    actions = [action_filter_done]
+    actions = [action_mark_as_done]
 
 
 class CategoryAdmin(admin.ModelAdmin):
