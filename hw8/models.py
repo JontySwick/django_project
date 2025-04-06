@@ -28,7 +28,7 @@ class Task(models.Model):
     categories = models.ManyToManyField(Category)
     status = models.CharField(max_length=12, choices=possible_statuses)
     deadline = models.DateTimeField()
-    created_at = models.DateTimeField()
+    created_at = models.DateTimeField(auto_now_add=True, blank=True)
 
     def __str__(self):
         return self.title
@@ -47,7 +47,7 @@ class SubTask(models.Model):
     description = models.CharField(max_length=200)
     status = models.CharField(max_length=12, choices=possible_statuses)
     deadline = models.DateTimeField()
-    created_at = models.DateTimeField()
+    created_at = models.DateTimeField(auto_now_add=True, blank=True)
 
     def __str__(self):
         return self.title
