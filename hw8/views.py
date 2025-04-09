@@ -45,16 +45,6 @@ def task_one(request, id):
 
 
 @api_view(['GET'])
-def task_one(request, id):
-    try:
-        task = Task.objects.get(pk=id)
-        serializer = TaskSerializer(task)
-        return Response(serializer.data, status=status.HTTP_200_OK)
-    except ObjectDoesNotExist as e:
-        return (Response(e.__str__(), status=status.HTTP_404_NOT_FOUND))
-
-
-@api_view(['GET'])
 def task_statistic(request):
     total_tasks = Task.objects.count()
     tasks_by_status = Task.objects.values('status').annotate(count=Count('status'))
