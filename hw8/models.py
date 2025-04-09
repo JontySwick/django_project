@@ -1,6 +1,6 @@
 from django.db import models
 
-possible_statuses = [
+POSSIBLE_STATUSES = [
     ('new', 'New'),
     ('in_progress', 'In progress'),
     ('pending', 'Pending'),
@@ -26,7 +26,7 @@ class Task(models.Model):
     title = models.CharField(max_length=256, unique_for_date='created_at')
     description = models.CharField(max_length=512)
     categories = models.ManyToManyField(Category)
-    status = models.CharField(max_length=12, choices=possible_statuses)
+    status = models.CharField(max_length=12, choices=POSSIBLE_STATUSES)
     deadline = models.DateTimeField()
     created_at = models.DateTimeField(auto_now_add=True, blank=True)
 
@@ -45,7 +45,7 @@ class SubTask(models.Model):
     title = models.CharField(max_length=200, unique_for_date='created_at')
     task = models.ForeignKey(Task, on_delete=models.CASCADE, related_name='sub_tasks')
     description = models.CharField(max_length=200)
-    status = models.CharField(max_length=12, choices=possible_statuses)
+    status = models.CharField(max_length=12, choices=POSSIBLE_STATUSES)
     deadline = models.DateTimeField()
     created_at = models.DateTimeField(auto_now_add=True, blank=True)
 
