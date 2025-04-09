@@ -43,7 +43,7 @@ class Task(models.Model):
 
 class SubTask(models.Model):
     title = models.CharField(max_length=200, unique_for_date='created_at')
-    task = models.ForeignKey(Task, on_delete=models.CASCADE)
+    task = models.ForeignKey(Task, on_delete=models.CASCADE, related_name='sub_tasks')
     description = models.CharField(max_length=200)
     status = models.CharField(max_length=12, choices=possible_statuses)
     deadline = models.DateTimeField()
