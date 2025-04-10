@@ -1,4 +1,8 @@
+from django.utils import timezone
+
 from django.db import models
+
+from hw8.managers import SoftDeleteManager
 
 POSSIBLE_STATUSES = [
     ('new', 'New'),
@@ -11,6 +15,11 @@ POSSIBLE_STATUSES = [
 
 class Category(models.Model):
     name = models.CharField(max_length=200)
+    is_deleted = models.BooleanField(default=False)
+    deleted_at = models.DateTimeField(null=True)
+
+    object = objects = SoftDeleteManager()
+
 
     def __str__(self):
         return self.name
@@ -20,6 +29,11 @@ class Category(models.Model):
         verbose_name = 'Category'
         verbose_name_plural = 'Categories'
         unique_together = ('name',)
+
+    def delete(self, *args, **kwargs):
+        self.is_deleted = True
+        self.deleted_at = timezone.now()
+        self.save()
 
 
 class Task(models.Model):

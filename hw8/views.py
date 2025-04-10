@@ -4,14 +4,14 @@ from django.core.exceptions import ObjectDoesNotExist
 from django.db.models import Q, Count
 from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework import status, filters
-from rest_framework.decorators import api_view
+from rest_framework.decorators import api_view, action
 from rest_framework.generics import ListCreateAPIView, RetrieveUpdateDestroyAPIView
-from rest_framework.pagination import PageNumberPagination
 from rest_framework.response import Response
-from rest_framework.views import APIView
+from rest_framework.viewsets import ModelViewSet
 
-from hw8.models import Task, SubTask
-from hw8.serializers import TaskCreateSerializer, TaskDetailSerializer, SubTaskCreateSerializer
+from hw8.models import Task, SubTask, Category
+from hw8.serializers import TaskCreateSerializer, TaskDetailSerializer, SubTaskCreateSerializer, \
+    CategoryCreateSerializer
 
 
 class TaskListView(ListCreateAPIView):
@@ -60,3 +60,13 @@ class SubTaskListCreateView(ListCreateAPIView):
 class SubTaskDetailUpdateDeleteView(RetrieveUpdateDestroyAPIView):
     queryset = SubTask.objects.all()
     serializer_class = SubTaskCreateSerializer
+
+class CategoryViewSet(ModelViewSet):
+    queryset = Category.objects.all()
+    serializer_class = CategoryCreateSerializer
+
+    @action(detail=False, methods=['get'])
+    def count_tasks(self, request):
+        data = Category.objects.annotate(task_count=Count('task')).values('id', 'name', 'task_count')
+
+        return Response(data)
