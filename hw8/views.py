@@ -6,6 +6,7 @@ from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework import status, filters
 from rest_framework.decorators import api_view, action
 from rest_framework.generics import ListCreateAPIView, RetrieveUpdateDestroyAPIView
+from rest_framework.permissions import IsAuthenticatedOrReadOnly
 from rest_framework.response import Response
 from rest_framework.viewsets import ModelViewSet
 
@@ -15,6 +16,7 @@ from hw8.serializers import TaskCreateSerializer, TaskDetailSerializer, SubTaskC
 
 
 class TaskListView(ListCreateAPIView):
+    permission_classes = [IsAuthenticatedOrReadOnly]
     queryset = Task.objects.all()
     filter_backends = [DjangoFilterBackend, filters.SearchFilter, filters.OrderingFilter]
     filterset_fields = ['status', 'deadline']
@@ -29,6 +31,7 @@ class TaskListView(ListCreateAPIView):
 
 
 class TaskOneView(RetrieveUpdateDestroyAPIView):
+    permission_classes = [IsAuthenticatedOrReadOnly]
     queryset = Task.objects.all()
     serializer_class = TaskDetailSerializer
 
@@ -49,6 +52,7 @@ def task_statistic(request):
 
 
 class SubTaskListCreateView(ListCreateAPIView):
+    permission_classes = [IsAuthenticatedOrReadOnly]
     queryset = SubTask.objects.all()
     serializer_class = SubTaskCreateSerializer
     filter_backends = [DjangoFilterBackend, filters.SearchFilter, filters.OrderingFilter]
@@ -58,10 +62,12 @@ class SubTaskListCreateView(ListCreateAPIView):
 
 
 class SubTaskDetailUpdateDeleteView(RetrieveUpdateDestroyAPIView):
+    permission_classes = [IsAuthenticatedOrReadOnly]
     queryset = SubTask.objects.all()
     serializer_class = SubTaskCreateSerializer
 
 class CategoryViewSet(ModelViewSet):
+    permission_classes = [IsAuthenticatedOrReadOnly]
     queryset = Category.objects.all()
     serializer_class = CategoryCreateSerializer
 
