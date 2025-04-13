@@ -1,3 +1,4 @@
+from django.contrib.auth.models import User
 from django.utils import timezone
 
 from django.db import models
@@ -43,6 +44,7 @@ class Task(models.Model):
     status = models.CharField(max_length=12, choices=POSSIBLE_STATUSES)
     deadline = models.DateTimeField()
     created_at = models.DateTimeField(auto_now_add=True, blank=True)
+    owner = models.ForeignKey(User, on_delete=models.CASCADE, related_name='tasks')
 
     def __str__(self):
         return self.title
@@ -62,6 +64,7 @@ class SubTask(models.Model):
     status = models.CharField(max_length=12, choices=POSSIBLE_STATUSES)
     deadline = models.DateTimeField()
     created_at = models.DateTimeField(auto_now_add=True, blank=True)
+    owner = models.ForeignKey(User, on_delete=models.CASCADE, related_name='sub_tasks')
 
     def __str__(self):
         return self.title
