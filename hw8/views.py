@@ -28,7 +28,7 @@ class TaskListView(ModelViewSet):
     ordering_fields = ['created_at']
 
     def get_serializer_class(self):
-        if self.request.method == 'POST':
+        if self.request.method != 'GET':
             return TaskCreateSerializer
 
         return TaskDetailSerializer
@@ -40,7 +40,7 @@ class TaskListView(ModelViewSet):
     def my(self, request):
         data = {}
         if type(self.request.user) is not AnonymousUser:
-            tasks = data=Task.objects.filter(owner=self.request.user)
+            tasks = Task.objects.filter(owner=self.request.user)
             serializer = self.get_serializer_class()(tasks, many=True)
             data = serializer.data
 
